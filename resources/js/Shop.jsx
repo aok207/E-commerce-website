@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import axios from "axios";
 import ProductCard from "./components/ProductCard";
@@ -12,6 +12,8 @@ const bookmarkedProducts = bladeBookmarkedProducts;
 const cart = bladeCart;
 
 const Shop = () => {
+    const shopContainerRef = useRef();
+
     const [checkedState, setCheckedState] = useState(
         new Array(categories.length).fill(false)
     );
@@ -29,8 +31,8 @@ const Shop = () => {
 
     const handleScroll = () => {
         if (
-            window.scrollY + window.innerHeight >=
-                document.body.offsetHeight - 50 &&
+            shopContainerRef.current.scrollTop + window.innerHeight >=
+                shopContainerRef.current.scrollHeight - 10 &&
             !isLoading
         ) {
             getProducts();
@@ -202,6 +204,8 @@ const Shop = () => {
     return (
         <div
             className="flex flex-col h-full overflow-hidden lg:overflow-auto items-center lg:items-start lg:flex-row w-full lg:px-16 md:px-10 px-6 text-black dark:text-white"
+            id="shop-container"
+            ref={shopContainerRef}
             onScroll={handleScroll}
         >
             {/* mobile filter */}
